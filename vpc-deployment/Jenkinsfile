@@ -31,7 +31,6 @@ def terraform_install() {
   #! /bin/bash
 
   if [ ! -d ${JENKINS_HOME}/custom_tools ]; then
-     sudo chown ec2-user:ec2-user /var/lib
      mkdir -p ${JENKINS_HOME}/custom_tools
   fi
 
