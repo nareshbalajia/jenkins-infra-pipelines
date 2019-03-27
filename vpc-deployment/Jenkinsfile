@@ -35,7 +35,7 @@ def terraform_install() {
   fi
 
   if [ ! -f ${JENKINS_HOME}/custom_tools/terraform ]; then
-     apt install -y unzip
+     sudo apt install -y unzip jq
      TERRAFORM_VERSION=\$(curl https://api.github.com/repos/hashicorp/terraform/releases/latest | jq '.tag_name' | tr -d '"' | tr -d v)
      DOWNLOAD_URL=https://releases.hashicorp.com/terraform/\${TERRAFORM_VERSION}/terraform_\${TERRAFORM_VERSION}_linux_amd64.zip
      echo \$TERRAFORM_VERSION
