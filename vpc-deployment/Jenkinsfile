@@ -1,0 +1,24 @@
+node {
+  def credentialsId = 'git-ssh-key'
+  def tf_checkout_dir = 'tf-modules'
+  def tf_state_bucket = "${TF_STATE_BUCKET}"
+
+  def operation = "${OPERATION}"
+
+  def backend_config = [
+    bucket: tf_state_bucket,
+    key: "terraform/backend/${REGION}/vpc_infra/terraform.tfstate",
+    region: "${REGION}",
+    encrypt: true
+  ]
+
+  stage("Checking out TerraForm modules repo") {
+    checkout poll:false, scm: [
+      $class: 'GitSCM',
+      branches: [[name: "${TF_GIT_BRANCH}"]],
+      extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: tf_checkout_dir ]],
+      submoduleCfg: [],
+      userRemoteConfigs: [[url: "${TF_GIT_URL}", credentialsId: credentialsId]]
+      ]
+  }
+}
