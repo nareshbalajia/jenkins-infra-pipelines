@@ -12,6 +12,26 @@ node {
     encrypt: true
   ]
 
+  def terraform_install() {
+    sh("""
+    #! /bin/bash
+
+    if [ ! -d ${JENKINS_HOME}/custom_tools ]; then
+       sudo chown ec2-user:ec2-user /var/lib
+       mkdir -p ${JENKINS_HOME}/custom_tools
+    fi
+
+    if [ ! -f ${JENKINS_HOME}/custom_tools/terraform ]; then
+       TERRAFORM_VERSION=\$(curl https://api.github.com/repos/hashicorp/terraform/releases/latest | jq '.tag_name' | tr -d '"' | tr -d v)
+       DOWNLOAD_URL=https://releases.hashicorp.com/terraform/\${TERRAFORM_VERSION}/terraform_\${TERRAFORM_VERSION}_linux_amd64.zip
+       echo \$TERRAFORM_VERSION
+       curl -o /tmp/terraform_\$TERRAFORM_VERSION.zip \$DOWNLOAD_URL
+       unzip /tmp/terraform_\$TERRAFORM_VERSION.zip -d $JENKINS_HOME/custom_tools
+       echo "plugin_cache_dir   = \\"$JENKINS_HOME/.terraform.d/plugin-cache\\"" > $JENKINS_HOME/.terraformrc
+    fi
+     """)
+  }
+
   stage("Checking out TerraForm modules repo") {
     checkout poll:false, scm: [
       $class: 'GitSCM',
@@ -20,5 +40,9 @@ node {
       submoduleCfg: [],
       userRemoteConfigs: [[url: "${TF_GIT_URL}", credentialsId: credentialsId]]
       ]
+  }
+
+  stage("Install Terraform") {
+    terraform_install()
   }
 }
