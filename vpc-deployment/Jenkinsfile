@@ -5,12 +5,6 @@ node {
 
   def operation = "${OPERATION}"
 
-  def backend_config = [
-    bucket: tf_state_bucket,
-    key: "terraform/backend/${REGION}/vpc_infra/terraform.tfstate",
-    region: "${REGION}",
-    encrypt: true
-  ]
   stage("Checking out TerraForm modules repo") {
     checkout poll:false, scm: [
       $class: 'GitSCM',
@@ -23,6 +17,19 @@ node {
 
   stage("Install Terraform") {
     terraform_install()
+  }
+
+  stage("Terraform deployment of the VPC infrastructure") {
+    dir(tf_checkout_dir) {
+      println("Validating terraform template syntax")
+      ansiColor('xterm') {
+        sh("""${JENKINS_HOME}/custom_tools/terraform validate -check-variables=true""")
+      }
+      println("Initializing terraform execution")
+      ansiColor('xterm') {
+        sh("""${JENKINS_HOME}/custom_tools/terraform init -input=false""")
+      }
+    }
   }
 }
 
