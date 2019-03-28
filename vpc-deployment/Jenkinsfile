@@ -51,7 +51,17 @@ node {
 
         //applying plan if set to true
         if(apply) {
-          println("Starting TF apply..")
+          if(operation == "destroy") {
+            println("Starting terraform destroy")
+            ansiColor('xterm') {
+              sh("""${JENKINS_HOME}/custom_tools/terraform plan -destroy -auto-approve=true """)
+            }
+          } else if(operation == "create/update") {
+            println("Starting Terraform apply")
+            ansiColor('xterm') {
+              sh("""${JENKINS_HOME}/custom_tools/terraform apply -input=false -auto-approve=true plan.out """)
+            }
+          }
         }
       }
     }
