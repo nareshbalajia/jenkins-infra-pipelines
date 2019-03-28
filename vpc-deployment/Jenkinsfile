@@ -22,6 +22,7 @@ node {
   stage("Terraform deployment of the VPC infrastructure") {
     try {
       dir(tf_checkout_dir) {
+        def apply = false
         println("Initializing terraform execution")
         ansiColor('xterm') {
           sh("""${JENKINS_HOME}/custom_tools/terraform init -input=false -backend-config="bucket=${TF_STATE_BUCKET}" -backend-config="region=${REGION}" """)
@@ -32,9 +33,25 @@ node {
           sh("""${JENKINS_HOME}/custom_tools/terraform validate -check-variables=true""")
         }
 
-        println("Generating Terraform Plan")
-        ansiColor('xterm') {
-          sh("""${JENKINS_HOME}/custom_tools/terraform plan -input=false -out=plan.out """)
+        if(operation == "destroy") {
+          println("Generating Terraform Plan for destroy")
+          ansiColor('xterm') {
+            sh("""${JENKINS_HOME}/custom_tools/terraform plan -destroy -input=false -out=plan.out """)
+          }
+        } else if(operation == "create/update") {
+          println("Generating Terraform Plan")
+          ansiColor('xterm') {
+            sh("""${JENKINS_HOME}/custom_tools/terraform plan -input=false -out=plan.out """)
+          }
+        }
+
+        println("Approval for TF plan")
+        input message: 'Apply Terraform Plan?', ok: 'Apply'
+        apply = true
+
+        //applying plan if set to true
+        if(apply) {
+          println("Starting TF apply..")
         }
       }
     }
