@@ -3,7 +3,7 @@ tf_git_branch = "master"
 job_name = "deploy-vpc-infra"
 job_path = "${new File(__FILE__).parent}"
 jenkinsfile = job_path + "/Jenkinsfile"
-REGION = "us-east-1"
+REGION = "ap-southeast-1"
 
 pipelineJob(job_name) {
   description("Jenkins pipeline to deploy VPC infrastructure")
