@@ -27,7 +27,7 @@ node {
       }
       println("Initializing terraform execution")
       ansiColor('xterm') {
-        sh("""${JENKINS_HOME}/custom_tools/terraform init -input=false""")
+        sh("""${JENKINS_HOME}/custom_tools/terraform init -input=false -backend-config="bucket=${TF_STATE_BUCKET}" -backend-config="region=${REGION}" """)
       }
     }
   }
