@@ -34,12 +34,13 @@ node {
 
         println("Generating Terraform Plan")
         ansiColor('xterm') {
-          sh("""${JENKINS_HOME}/custom_tools/terraform plan -input=false -out=plan.out -detailed-exitcode """)
+          sh("""${JENKINS_HOME}/custom_tools/terraform plan -input=false -out=plan.out """)
         }
       }
     }
     catch(err) {
       println(err)
+      currentBuild.result = 'FAILED'
     }
     finally {
       deleteDir()
