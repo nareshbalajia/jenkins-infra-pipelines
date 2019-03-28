@@ -46,7 +46,7 @@ node {
         }
 
         println("Approval for TF plan")
-        input id:'TFApproval' message: 'Apply Terraform Plan?', ok: 'Apply'
+        input id:'TFApproval', message: 'Apply Terraform Plan?', ok: 'Apply'
         apply = true
 
         //applying plan if set to true
