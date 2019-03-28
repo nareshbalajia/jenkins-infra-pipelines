@@ -31,6 +31,11 @@ node {
         ansiColor('xterm') {
           sh("""${JENKINS_HOME}/custom_tools/terraform validate -check-variables=true""")
         }
+
+        println("Generating Terraform Plan")
+        ansiColor('xterm') {
+          sh("""${JENKINS_HOME}/custom_tools/terraform plan -input=false -out=plan.out -detailed-exitcode """)
+        }
       }
     }
     catch(err) {
