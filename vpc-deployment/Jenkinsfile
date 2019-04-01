@@ -54,7 +54,7 @@ node {
           if(operation == "destroy") {
             println("Starting terraform destroy")
             ansiColor('xterm') {
-              sh("""${JENKINS_HOME}/custom_tools/terraform plan -destroy -auto-approve=true """)
+              sh("""${JENKINS_HOME}/custom_tools/terraform destroy -auto-approve=true """)
             }
           } else if(operation == "create/update") {
             println("Starting Terraform apply")
