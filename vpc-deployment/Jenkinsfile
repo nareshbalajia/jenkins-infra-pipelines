@@ -48,6 +48,9 @@ node {
         println("Approval for TF plan")
         input id:'TFApproval', message: 'Apply Terraform Plan?', ok: 'Apply'
         apply = true
+        //send slack notification to the channel
+
+        send_slack_notification()
 
         //applying plan if set to true
         if(apply) {
@@ -93,4 +96,16 @@ def terraform_install() {
      echo "plugin_cache_dir   = \\"$JENKINS_HOME/.terraform.d/plugin-cache\\"" > $JENKINS_HOME/.terraformrc
   fi
    """)
+}
+
+def send_slack_notification() {
+  def attachments = [
+        [
+            text: 'Test deployment',
+            fallback: 'Test',
+            color: '#ff0000'
+        ]
+    ]
+
+    slackSend(attachments: attachments)
 }
