@@ -46,11 +46,11 @@ node {
         }
 
         println("Approval for TF plan")
+
+        //send slack notification to the channel
+        send_slack_notification()
         input id:'TFApproval', message: 'Apply Terraform Plan?', ok: 'Apply'
         apply = true
-        //send slack notification to the channel
-
-        send_slack_notification()
 
         //applying plan if set to true
         if(apply) {
