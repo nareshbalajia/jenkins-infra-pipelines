@@ -103,13 +103,13 @@ def send_slack_notification() {
         [
             text: "Approval for Infra pipeline ${env.JOB_NAME}, build- ${env.BUILD_NUMBER}",
             fallback: 'Click on button to review and accept/reject',
-            color: '#008000'
+            color: '#008000',
             actions: [
-              {
-                "type": "button",
-                "text": "View Pipeline"
-                "url": "http://13.229.148.135:8080/blue/organizations/jenkins/deploy-vpc-infra/detail/deploy-vpc-infra/${env.BUILD_NUMBER}/pipeline"
-              }
+                [
+                  type: "button",
+                  text: "Approve/Reject",
+                  url: "${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/detail/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline"
+                ]
             ]
         ]
     ]
