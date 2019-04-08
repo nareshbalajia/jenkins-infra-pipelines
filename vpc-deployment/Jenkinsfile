@@ -47,6 +47,10 @@ node {
 
         println("Approval for TF plan")
 
+        ansiColor('xterm') {
+          def show = sh(returnStdout: true, script: "${JENKINS_HOME}/custom_tools/terraform show plan.out -no-color")
+          println(show)
+        }
         //send slack notification to the channel
         send_slack_notification()
         input id:'TFApproval', message: 'Apply Terraform Plan?', ok: 'Apply'
