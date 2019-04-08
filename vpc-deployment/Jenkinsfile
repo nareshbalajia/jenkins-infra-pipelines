@@ -34,23 +34,18 @@ node {
         }
 
         if(operation == "destroy") {
-          println("Generating Terraform Plan for destroy")
+          println("Generating Terraform Plan for destroy, Click on below step to see TF Plan")
           ansiColor('xterm') {
             sh("""${JENKINS_HOME}/custom_tools/terraform plan -destroy -input=false -out=plan.out """)
           }
         } else if(operation == "create/update") {
-          println("Generating Terraform Plan")
+          println("Generating Terraform Plan, Click on below step to see TF Plan")
           ansiColor('xterm') {
             sh("""${JENKINS_HOME}/custom_tools/terraform plan -input=false -out=plan.out """)
           }
         }
 
         println("Approval for TF plan")
-
-        ansiColor('xterm') {
-          def show = sh(returnStdout: true, script: "${JENKINS_HOME}/custom_tools/terraform show plan.out -no-color")
-          println(show)
-        }
         //send slack notification to the channel
         send_slack_notification()
         input id:'TFApproval', message: 'Apply Terraform Plan?', ok: 'Apply'
