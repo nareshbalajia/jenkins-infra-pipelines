@@ -101,9 +101,16 @@ def terraform_install() {
 def send_slack_notification() {
   def attachments = [
         [
-            text: 'Test deployment',
-            fallback: 'Test',
-            color: '#ff0000'
+            text: "Approval for Infra pipeline ${env.JOB_NAME}, build- ${env.BUILD_NUMBER}",
+            fallback: 'Click on button to review and accept/reject',
+            color: '#008000'
+            actions: [
+              {
+                "type": "button",
+                "text": "View Pipeline"
+                "url": "http://13.229.148.135:8080/blue/organizations/jenkins/deploy-vpc-infra/detail/deploy-vpc-infra/${env.BUILD_NUMBER}/pipeline"
+              }
+            ]
         ]
     ]
 
