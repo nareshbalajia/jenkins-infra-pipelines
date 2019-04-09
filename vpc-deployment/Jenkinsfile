@@ -113,5 +113,5 @@ def send_slack_notification() {
         ]
     ]
 
-    slackSend(channel: '@hsim', attachments: attachments)
+    slackSend(channel: '#jenkins-cd-approvals', attachments: attachments)
 }
