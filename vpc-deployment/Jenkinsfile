@@ -113,5 +113,5 @@ def send_slack_notification() {
         ]
     ]
 
-    slackSend(attachments: attachments)
+    slackSend(channel: '@hsim', attachments: attachments)
 }
