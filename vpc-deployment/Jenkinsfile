@@ -2,6 +2,7 @@ node {
   def credentialsId = 'git-ssh-key'
   def tf_checkout_dir = 'tf-modules'
   def tf_state_bucket = "${TF_STATE_BUCKET}"
+  def terraboard_url = "http://13.229.148.135:8081/search"
 
   def operation = "${OPERATION}"
 
@@ -48,6 +49,7 @@ node {
         println("Approval for TF plan")
         //send slack notification to the channel
         send_slack_notification()
+        println("Click on Terraboard URL here to view the Terraform state file before deployment: ${terraboard_url}")
         input id:'TFApproval', message: 'Apply Terraform Plan?', ok: 'Apply', submitter: "naresh,howard"
         apply = true
 
